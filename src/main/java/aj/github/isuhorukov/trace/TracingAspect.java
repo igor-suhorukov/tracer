@@ -38,7 +38,7 @@ public class TracingAspect {
             +"&& (execution(public * ru..*(..)) || execution(public static * ru..*(..)))"
     )
     public Object aroundAnyMethodsFromProject(ProceedingJoinPoint pjp) throws Throwable {
-        return proceedWithSpan(pjp, pjp.getSignature().toString(), result -> {
+        return proceedWithSpan(pjp, pjp.getSignature().toLongString(), result -> {
 /*
             Span span = result.getKey();
             final String[] parameterNames = ((CodeSignature) pjp.getSignature()).getParameterNames();
@@ -57,7 +57,7 @@ public class TracingAspect {
                                    Consumer<Map.Entry<Span, Object>> successHandler,
                                    Consumer<Map.Entry<Span, Exception>> errorHandler) throws Throwable {
         SourceLocation location = pjp.getStaticPart().getSourceLocation();
-        if(location.getLine()==0){ //auto generated proxy, lombok magic etc
+        if(location.getLine()==0 || Boolean.getBoolean("skipTracing")){ //auto generated proxy, lombok magic etc
             return pjp.proceed();
         }
         SpanBuilder spanBuilder = tracer.spanBuilder(spanName);
