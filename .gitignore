@@ -1,0 +1,5 @@
+.idea
+/target/*
+/src/site/markdown/README.md
+/.allure/*
+/allure-results/*
